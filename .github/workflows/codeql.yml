@@ -1,39 +1,3 @@
-name: "CodeQL"
-
-"on":
-  push:
-    branches: ["community"]
-  pull_request:
-    branches: ["community"]
-  schedule:
-    - cron: "46 18 * * 5"
-
-jobs:
-  analyze:
-    name: Analyze
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [cpp]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: ${{ matrix.language }}
-          queries: +security-and-quality
-
-      - name: Install dependencies
-        run: |
           sudo apt update -qq && sudo apt install -y cmake pkg-config libssl-dev libudev-dev libhttp-parser-dev libpcsclite-dev \
                                                      libqt6svg6-dev libqt6websockets6-dev qt6-base-dev qt6-base-private-dev \
                                                      qt6-declarative-dev qt6-connectivity-dev qt6-scxml-dev qt6-tools-dev \
